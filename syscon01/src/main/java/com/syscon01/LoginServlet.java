@@ -21,12 +21,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String userId = request.getParameter("userId");
+        String userPass = request.getParameter("password");
         boolean userExists = false;
 
         // データベース接続情報
-        String url = "jdbc:mysql://localhost:3306/account"; // データベース名を入力してください
+        String url = "jdbc:mysql://localhost:3306/syskadai"; // データベース名を入力してください
         String username = "root"; // ユーザー名を入力してください
         String password = "password"; // パスワードを入力してください
+
+        System.out.println("Login Start");
 
         try {
             // MySQL JDBC ドライバをロード
@@ -34,14 +37,25 @@ public class LoginServlet extends HttpServlet {
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // SQLクエリでユーザーIDを確認
-            String sql = "SELECT * FROM ユーザー WHERE id = ?";
+            String sql = "SELECT * FROM employee WHERE empid = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, userId);
             ResultSet rs = stmt.executeQuery();
 
             // ユーザーが存在するかチェック
             if (rs.next()) {
-                userExists = true;
+                String pass = rs.getString(4);
+                boolean flag = rs.getBoolean(6);
+                System.out.println(pass);
+                System.out.println(flag);
+                if(flag) {
+                    System.out.println("Password is encrypt");                	
+                }else {
+                    System.out.println("Password is not encrypt");
+                	if(userPass.equals(pass)) {
+                        userExists = true;                		
+                	}
+                }
             }
 
             rs.close();
