@@ -51,7 +51,6 @@ public class EmpRegister extends HttpServlet {
             stmt.setString(4, hashedPassword);
             stmt.setInt(5, emprole);
             stmt.setBoolean(6, flag);
-
             int rowsInserted = stmt.executeUpdate();
             stmt.close();
             conn.close();
@@ -68,6 +67,10 @@ public class EmpRegister extends HttpServlet {
         }
     }
 
+    /* パスワードハッシュ化メソッド
+     * @param password 入力されたパスワード
+     * @return ハッシュ値
+     */
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
