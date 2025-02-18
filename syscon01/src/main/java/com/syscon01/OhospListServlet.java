@@ -15,12 +15,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.model.Siiregyosha;
+import com.model.Tabyouin;
 
-@WebServlet("/SupplListServlet")
-public class SupplListServlet extends HttpServlet {
+@WebServlet("/OhospListServlet")
+public class OhospListServlet extends HttpServlet {
     
-    // ※実際の環境に合わせてDB_URL、DB_USER、DB_PASSを設定してください
+    // ※実際の環境に合わせてDB接続情報を設定してください
     private static final String DB_URL = "jdbc:mysql://localhost:3306/syskadai";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "password";
@@ -40,48 +40,43 @@ public class SupplListServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // 住所検索の場合：searchType="address"、入力値はsearchAddress
-        // 資本金検索の場合：searchType="shihonkin"、入力値はsearchShihonkin
+        // 検索区分： "address" または "shihonkin" を受け取る
         String searchType = request.getParameter("searchType");
         String searchAddress = request.getParameter("searchAddress");
         String searchShihonkin = request.getParameter("searchShihonkin");
         
-        List<Siiregyosha> list = new ArrayList<>();
+        List<Tabyouin> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "SELECT * FROM shiiregyosha"; // 初期は全件表示
+        String sql = "SELECT * FROM tabyouin"; // 初回実行時は全件表示
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-            
             if ("address".equals(searchType) && searchAddress != null && !searchAddress.trim().isEmpty()) {
-                sql = "SELECT * FROM shiiregyosha WHERE shiireaddress LIKE ?";
+                sql = "SELECT * FROM tabyouin WHERE tabyouinaddress LIKE ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, "%" + searchAddress + "%");
             } else if ("shihonkin".equals(searchType) && searchShihonkin != null && !searchShihonkin.trim().isEmpty()) {
-                sql = "SELECT * FROM shiiregyosha WHERE shihonkin >= ?";
+                sql = "SELECT * FROM tabyouin WHERE tabyouinshihonkin >= ?";
                 pstmt = conn.prepareStatement(sql);
                 int shihonkinVal = Integer.parseInt(searchShihonkin);
                 pstmt.setInt(1, shihonkinVal);
             } else {
-                // 検索条件がない場合は全件取得
                 pstmt = conn.prepareStatement(sql);
             }
-            
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                Siiregyosha s = new Siiregyosha();
-                s.setShiireid(rs.getString("shiireid"));
-                s.setShiiremei(rs.getString("shiiremei"));
-                s.setShiireaddress(rs.getString("shiireaddress"));
-                s.setShiiretel(rs.getString("shiiretel"));
-                s.setShihonkin(rs.getInt("shihonkin"));
-                s.setNouki(rs.getInt("nouki"));
-                list.add(s);
+                Tabyouin t = new Tabyouin();
+                t.setTabyouinid(rs.getString("tabyouinid"));
+                t.setTabyouinmei(rs.getString("tabyouinmei"));
+                t.setTabyouinaddress(rs.getString("tabyouinaddress"));
+                t.setTabyouintel(rs.getString("tabyouintel"));
+                t.setTabyouinshihonkin(rs.getInt("tabyouinshihonkin"));
+                t.setKyukyu(rs.getInt("kyukyu"));
+                list.add(t);
             }
-            
         } catch (Exception e) {
             throw new ServletException(e);
         } finally {
@@ -90,11 +85,10 @@ public class SupplListServlet extends HttpServlet {
             try { if (conn != null) conn.close(); } catch (Exception ignore) {}
         }
         
-        // JSPに渡すための属性に検索条件と結果リストをセット
-        request.setAttribute("siiregyoshaList", list);
+        request.setAttribute("tabyouinList", list);
         request.setAttribute("searchAddress", searchAddress);
         request.setAttribute("searchShihonkin", searchShihonkin);
-        RequestDispatcher rd = request.getRequestDispatcher("supplList.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("ohosplist.jsp");
         rd.forward(request, response);
     }
 }
