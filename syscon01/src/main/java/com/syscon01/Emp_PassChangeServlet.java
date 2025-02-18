@@ -33,13 +33,13 @@ public class Emp_PassChangeServlet extends HttpServlet {
         }
         
         switch(action) {
-            case "checkEmployee":
+            case "checkEmployee":		// 従業員IDの存在チェック
                 checkEmployee(request, response);
                 break;
-            case "validatePasswords":
+            case "validatePasswords":	// 入力された2つのパスワードの比較
                 validatePasswords(request, response);
                 break;
-            case "updatePassword":
+            case "updatePassword":		// パスワードの更新
                 updatePassword(request, response);
                 break;
             default:
