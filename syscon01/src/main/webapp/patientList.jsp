@@ -2,7 +2,6 @@
 <%@ page import="jakarta.servlet.RequestDispatcher" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    // 直接このJSPにアクセスされた場合、一覧データがない場合はコントローラへフォワード
     if (request.getAttribute("patientList") == null) {
         RequestDispatcher rd = request.getRequestDispatcher("PatientList");
         rd.forward(request, response);
@@ -21,12 +20,23 @@
   <body>
     <h2>患者一覧表示</h2>
     
-    <!-- 検索フォーム -->
-    <form action="PatientList" method="get" class="search-form">
+    <!-- 検索フォーム（通常検索） -->
+    <form action="PatientList" method="get" class="search-form" style="display:inline-block;">
       姓もしくは名検索：<input type="text" name="searchTerm" value="${searchTerm}" />
+      <input type="hidden" name="searchType" value="name" />
       <input type="submit" value="検索" />
-      <input type="button" value="メインページへ戻る" onclick="location.href='mainPage.jsp'" />
     </form>
+    
+    <!-- 保険証期限切れ検索フォーム -->
+    <form action="PatientList" method="get" class="search-form" style="display:inline-block; margin-left:20px;">
+      <input type="hidden" name="searchType" value="expired" />
+      <input type="submit" value="保険証期限切れ検索" />
+    </form>
+    
+    <!-- メインページへ戻るボタン -->
+    <input type="button" value="メインページへ戻る" onclick="location.href='mainPage.jsp'" />
+    
+    <br/><br/>
     
     <!-- 一覧表示テーブル -->
     <table>
