@@ -1,0 +1,127 @@
+@charset "UTF-8";
+/* 基本リセット */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f7f7f7;
+  color: #333;
+}
+
+/* index.jsp 用ログインフォーム（既存スタイル） */
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+.input-group {
+  margin-bottom: 20px;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 0.9em;
+}
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
+@media (max-width: 480px) {
+  .login-container {
+    margin: 50px 20px;
+    padding: 30px 20px;
+  }
+}
+
+/* ------------------------------- */
+/* mainPage.jsp 用スタイル（.main-page 内でのみ適用） */
+/* ------------------------------- */
+
+.main-page .main-header {
+  background: #007BFF;
+  padding: 20px 0;
+  text-align: center;
+}
+.main-page .menu {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+.main-page .menu li {
+  margin: 5px 10px;
+}
+.main-page .menu li a {
+  display: block;
+  padding: 10px 15px;
+  background: #0056b3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+.main-page .menu li a:hover {
+  background: #003d80;
+}
+
+.main-page .main-content {
+  padding: 40px 20px;
+  text-align: center;
+}
+.main-page .welcome-section {
+  margin-bottom: 40px;
+}
+.main-page .welcome-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+.main-page .welcome-section p {
+  font-size: 1.2em;
+  color: #555;
+}
+
+.main-page .main-footer {
+  background: #007BFF;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+/* レスポンシブ対応（mainPage.jsp 用） */
+@media (max-width: 768px) {
+  .main-page .menu {
+    flex-direction: column;
+    align-items: center;
+  }
+}
