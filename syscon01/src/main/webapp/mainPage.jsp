@@ -7,12 +7,21 @@
     <title>メインページ</title>
 </head>
 <body>
-    <h2>メインページ</h2>
-    <p>ようこそ、${userId}さん！</p>
+    <%
+      String userId = (session != null) ? (String) session.getAttribute("userId") : "";
+      Integer userRole = (session != null && session.getAttribute("userRole") != null)
+                           ? (Integer) session.getAttribute("userRole") : null;
+    %>
+    <h1>メインメニュー</h1>
+    <p>ようこそ、<strong><%= userId %></strong> さん！
+       <% if(userRole != null) { %>
+           (ロール: <%= userRole %>)
+       <% } %>
+    </p>
     <ul class="menu">
       <li><a href="empReg.jsp">従業員登録</a></li>
       <li><a href="emp_P_input.jsp">従業員パスワード変更（管理者向け）</a></li>
-      <li><a href="emp_P_input.jsp">従業員パスワード変更（ログイン対象者向け）</a></li>
+      <li><a href="changePassword.jsp">従業員パスワード変更（ログイン対象者向け）</a></li>
       <li><a href="emp_n_input.jsp">従業員氏名情報情報変更</a></li>
       <li><a href="suppreg.jsp">仕入れ業者登録</a></li>
       <li><a href="supplList.jsp">仕入れ先一覧・検索</a></li>
@@ -25,6 +34,7 @@
       <li><a href="patsearch.jsp">保険証情報変更</a></li>
       <li><a href="medreg.jsp">処方薬登録</a></li>
       <li><a href="pill_patsearch.jsp">処方</a></li>
+      <li><a href="patdrugsearch.jsp">処方結果一覧</a></li>
     </ul>
 </body>
 </html>

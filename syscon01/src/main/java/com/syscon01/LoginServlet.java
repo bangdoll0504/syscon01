@@ -40,13 +40,14 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // 例として、カラム名で取得しています。必要に応じてインデックスを変更してください。
                 String storedPass = rs.getString("emppassword_hash");
                 boolean flag = rs.getBoolean("flag");
+                int userRole = rs.getInt("emprole"); // 追加：ユーザーロールの取得
+
                 if (flag) { // 利用者権限の場合：入力されたパスワードをハッシュ化して比較
                     String hashedInput = PasswordUtil.hashPassword(userPass);
-                	System.out.println(storedPass);
-                	System.out.println(hashedInput);
+                    System.out.println(storedPass);
+                    System.out.println(hashedInput);
                     if (hashedInput.equals(storedPass)) {
                         userExists = true;
                     }
@@ -54,6 +55,11 @@ public class LoginServlet extends HttpServlet {
                     if (userPass.equals(storedPass)) {
                         userExists = true;
                     }
+                }
+                if (userExists) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("userId", userId);
+                    session.setAttribute("userRole", userRole); // 追加：ユーザーロールをセッションに保存
                 }
             }
 
@@ -66,8 +72,6 @@ public class LoginServlet extends HttpServlet {
         }
         System.out.println(userExists);
         if (userExists) {
-            HttpSession session = request.getSession();
-            session.setAttribute("userId", userId);
             response.sendRedirect("mainPage.jsp");
         } else {
             response.sendRedirect("errorPage.jsp");
